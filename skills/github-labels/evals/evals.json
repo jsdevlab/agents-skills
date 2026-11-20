@@ -1,0 +1,65 @@
+{
+  "skill_name": "github-labels",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "为 `{repo}` 设计一套 GitHub label taxonomy，并写入 `.github/labels.yml`。项目是 Node.js CLI，需要 type/status/priority/area 分类；保留 `good first issue`；不要创建同义标签。",
+      "expected_output": "A valid labels manifest defines a coherent taxonomy with type, status, priority, and area categories, unique names, valid colors and descriptions, and the exact good first issue label.",
+      "files": [],
+      "expectations": [
+        ".github/labels.yml parses as a list of label objects",
+        "The taxonomy has type, status, priority, and area categories",
+        "At least 10 labels are defined with unique names",
+        "Every color is six hexadecimal digits and every description is 100 characters or fewer",
+        "The exact good first issue label is preserved",
+        "The taxonomy avoids synonyms such as bug/defect or enhancement/feature",
+        "NOTES.md explains the naming system and trade-offs"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "为 `{repo}` 写一个 GitHub Actions label 同步 workflow：PR 上 dry-run，main 上应用；使用 `.github/labels.yml`；权限最小化；action 固定到 SHA；初次上线不要删除未管理的 labels。",
+      "expected_output": "A label-sync workflow checks out the repository, uses the labeler action pinned to a SHA, grants issues write and contents read, dry-runs on pull requests, and keeps skip-delete enabled.",
+      "files": [],
+      "expectations": [
+        "The workflow YAML parses",
+        "The workflow runs on changes to labels.yml and the workflow file",
+        "actions/checkout is present before the labeler",
+        "The labeler action is pinned to a 40-character commit SHA",
+        "The workflow grants issues: write and does not grant contents: write",
+        "dry-run is true on pull_request",
+        "skip-delete is true for the initial rollout",
+        "NOTES.md explains the rollout and permission choices"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "`{repo}` 现在使用 `bug` label，issue 模板也引用 `bug`。把 label 改名为 `type: bug`，要求保留已有 issue 的 label 关联，并同步更新模板和 `.github/labels.yml`。",
+      "expected_output": "The manifest renames bug to type: bug with from_name, templates now reference type: bug, and no template still uses the old bare bug label.",
+      "files": [],
+      "expectations": [
+        ".github/labels.yml contains type: bug with from_name: bug",
+        "Issue templates reference type: bug instead of the old bare bug label",
+        "No template still uses the exact old bug label",
+        "The rename preserves issue assignments by using from_name rather than delete/recreate",
+        "All YAML files parse and label names remain unique",
+        "NOTES.md explains the coordinated template and label change"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "审计 `{repo}` 的 labels 和 issue templates：找出模板引用但仓库不存在的 labels，修复 `.github/labels.yml` 和模板，并加一个 CI 检查防止再次不一致。",
+      "expected_output": "All template labels exist in the manifest after the fix, and a CI check validates template label references against .github/labels.yml without deleting unrelated labels.",
+      "files": [],
+      "expectations": [
+        "The audit identifies the template labels missing from the manifest",
+        "Every template label now exists in .github/labels.yml",
+        "A CI workflow or script fails when a template references a missing label",
+        "The fix does not delete unrelated or unmanaged labels",
+        "All labels have valid colors and descriptions",
+        "All YAML files parse",
+        "NOTES.md explains the audit and the validation guard"
+      ]
+    }
+  ]
+}

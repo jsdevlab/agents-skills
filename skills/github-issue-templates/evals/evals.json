@@ -1,0 +1,65 @@
+{
+  "skill_name": "github-issue-templates",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "在 `{repo}` 里根据项目内容创建 GitHub issue 模板：一个 bug report 表单和一个 feature request 表单，再加 `config.yml`。项目是 Node.js CLI，支持 Node 20/22，Windows/macOS/Linux；bug 表单要问版本、系统、复现步骤、日志和截图；feature 表单要问问题和方案。只使用仓库已有的 labels，不要创建新 label。",
+      "expected_output": "Valid bug and feature issue forms exist with project-specific fields, config.yml disables blank issues and links a private security channel, and every template label exists in .github/labels.yml.",
+      "files": [],
+      "expectations": [
+        "bug_report.yml and feature_request.yml exist and parse as YAML",
+        "Both forms have name, description, and a non-empty body with valid unique IDs",
+        "The bug form asks for version, operating system, reproduction steps, logs, and screenshots",
+        "The feature form asks for the problem and proposed solution",
+        "config.yml sets blank_issues_enabled to false and includes a security contact link",
+        "Every template label exists in .github/labels.yml",
+        "No template asks for passwords, tokens, or unredacted personal data",
+        "NOTES.md explains the project-specific field choices"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "把 `{repo}` 的 `.github/ISSUE_TEMPLATE/bug_report.md` 迁移成 issue form（.yml），保留原有信息和 labels，补充 required 校验和日志/截图字段。不要重复保留同名模板。",
+      "expected_output": "A valid bug_report.yml replaces the Markdown template, preserves its labels and information, adds required summary/reproduction/version fields, and provides logs and screenshot inputs.",
+      "files": [],
+      "expectations": [
+        "A bug_report.yml issue form exists and parses as YAML",
+        "The form keeps the original template name and labels",
+        "Summary, reproduction, and version fields are required",
+        "Logs use a textarea with render or an upload field",
+        "The old Markdown template is removed or no duplicate chooser name remains",
+        "Every label exists in .github/labels.yml",
+        "The form does not ask for secrets or unredacted data"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "`{repo}` 的 issue form 无法在 chooser 中显示：请诊断并修复 `.github/ISSUE_TEMPLATE/bug_report.yml`，并确保 labels 与 `.github/labels.yml` 一致。",
+      "expected_output": "The broken form is repaired into valid schema, duplicate and invalid IDs are fixed, the template name is valid, and missing labels are resolved against the manifest.",
+      "files": [],
+      "expectations": [
+        "The repaired form parses as YAML",
+        "name, description, and body are present and the name is valid and unique",
+        "markdown elements have no id and all remaining IDs are unique",
+        "Every label referenced by the form exists in .github/labels.yml",
+        "The form keeps the intended bug-report fields after repair",
+        "The response identifies the root causes of the chooser failure"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "为 `{repo}` 这个 Rust library workspace 设计 issue templates：bug report 和 feature request，字段要贴合库的使用者（crate 版本、Rust 版本、目标平台、最小复现、日志），只引用已有 labels，并写 config.yml。",
+      "expected_output": "Rust-specific bug and feature forms exist with crate/Rust/platform/reproduction fields, valid schema, existing labels only, and a config.yml with security and support links.",
+      "files": [],
+      "expectations": [
+        "Both Rust issue forms exist and parse as YAML",
+        "The bug form asks for crate version, Rust version, target platform, minimal reproduction, and logs",
+        "The feature form asks for the problem and proposed API/behavior",
+        "Every template label exists in .github/labels.yml",
+        "config.yml includes a private security contact",
+        "The forms avoid irrelevant web-only fields",
+        "NOTES.md explains the Rust-specific choices"
+      ]
+    }
+  ]
+}

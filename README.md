@@ -16,6 +16,8 @@ npx skills add jsdevlab/agents-skills
 
 ```bash
 npx skills add jsdevlab/agents-skills --skill changesets
+npx skills add jsdevlab/agents-skills --skill github-issue-templates
+npx skills add jsdevlab/agents-skills --skill github-labels
 npx skills add jsdevlab/agents-skills --skill license
 npx skills add jsdevlab/agents-skills --skill release-plz
 npx skills add jsdevlab/agents-skills --skill tauri-v2
@@ -43,6 +45,8 @@ Copy a skill directory into one of:
 | Skill | What it does | Requirements |
 | --- | --- | --- |
 | [`changesets`](skills/changesets/SKILL.md) | Create, version, and publish npm packages with Changesets: semver bumps, changelogs, `changeset version` / `changeset publish`, `changesets/action@v2` CI with npm trusted publishing, prereleases, and snapshots. | Node.js 22.11+, 24, or 26+; `@changesets/cli` v3; pnpm `>=10`, npm `>=10.9`, or yarn `>=4.5.2` |
+| [`github-issue-templates`](skills/github-issue-templates/SKILL.md) | Build GitHub issue forms and classic templates from project context: `bug_report.yml`, `feature_request.yml`, `config.yml`, validation, project-specific version/platform/log fields, and label references that match the repository. Pairs with `github-labels`. | A GitHub repository with Issues enabled; YAML parser for local validation |
+| [`github-labels`](skills/github-labels/SKILL.md) | Design and sync GitHub labels as code: type/status/priority/area taxonomy, colors and descriptions, `gh label` commands, `.github/labels.yml`, and a pinned label-sync workflow with dry-run and safe deletion rules. Pairs with `github-issue-templates`. | GitHub repository write access; optional `gh` CLI; GitHub Actions for automatic sync |
 | [`license`](skills/license/SKILL.md) | Check and fix license headers and audit dependency licenses with Apache SkyWalking Eyes (`license-eye`): `.licenserc.yaml` configuration, `header check/fix/diff`, `dependency resolve/check`, LICENSE summaries, and GitHub Actions integration. | `license-eye` binary (release archive, `go install`, Homebrew, or Docker); Go 1.27+ if installing from source; Go, Maven, Node/npm/pnpm, Cargo, or Ruby toolchains for dependency checks |
 | [`release-plz`](skills/release-plz/SKILL.md) | Automate Rust releases with release-plz: release PRs from conventional commits, version bumps, changelogs, `cargo publish`, git tags, and GitHub/GitLab/Gitea releases. Covers `release-plz.toml`, release strategies, and CI setup with the GitHub Action or GitLab CI component. | release-plz 0.4.3+; Rust toolchain; GitHub Actions or GitLab CI; a cargo registry token for publishing |
 | [`tauri-v2`](skills/tauri-v2/SKILL.md) | Build Tauri 2 desktop and mobile apps: Rust commands and IPC, state, windows, `tauri.conf.json`, capabilities/permissions/CSP, official and custom plugins, installers, signing, app stores, auto-updates, GitHub Actions CI, and Learn recipes such as splashscreen, tray, menus, and sidecars. Includes split frontend/Tauri-shell layouts for teams that do not use the official template. | Rust 1.90+ for the updater plugin; Node.js LTS for JavaScript frontends; platform WebView/build toolchain (WebKitGTK 4.1, MSVC/WebView2, or Xcode); Android Studio/Xcode for mobile |
@@ -59,6 +63,24 @@ skills/
 │       ├── ci-automation.md
 │       ├── prereleases-and-snapshots.md
 │       └── troubleshooting.md
+├── github-issue-templates/
+│   ├── SKILL.md
+│   ├── evals/
+│   │   └── evals.json
+│   └── references/
+│       ├── forms.md
+│       ├── classic-and-config.md
+│       ├── design.md
+│       └── troubleshooting.md
+├── github-labels/
+│   ├── SKILL.md
+│   ├── evals/
+│   │   └── evals.json
+│   └── references/
+│       ├── taxonomy.md
+│       ├── cli-and-api.md
+│       ├── sync-action.md
+│       └── template-integration.md
 ├── license/
 │   ├── SKILL.md
 │   ├── evals/
@@ -71,6 +93,8 @@ skills/
 │       └── troubleshooting.md
 ├── release-plz/
 │   ├── SKILL.md
+│   ├── evals/
+│   │   └── evals.json
 │   └── references/
 │       ├── configuration.md
 │       ├── cli.md
