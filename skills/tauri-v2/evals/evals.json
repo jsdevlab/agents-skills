@@ -1,0 +1,139 @@
+{
+  "skill_name": "tauri-v2",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "在 `{repo}` 的 Tauri 2 应用里新增一个 `save_note` 命令：接收标题和正文，写入应用数据目录的 `notes.json`，返回保存路径；用状态保存最近一次保存时间，并在保存成功后通过事件通知前端。补上所需 capability。不要执行发布或打包。",
+      "expected_output": "A registered Tauri command writes notes under the app data directory, uses managed state for the last-save timestamp, emits an event, and is backed by a valid capability file.",
+      "files": [],
+      "expectations": [
+        "src-tauri/src defines a #[tauri::command] for save_note and registers it in generate_handler!",
+        "The command resolves the app data directory through Tauri path APIs instead of hardcoding an absolute path",
+        "Managed state is used for the last-save time and accessed with the exact State<T> type",
+        "The command emits an event after a successful save",
+        "The capability JSON parses and grants the core permissions needed by the window",
+        "cargo metadata succeeds for the workspace",
+        "No git tags, published versions, or bundle artifacts are created"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "审查并加固 `{repo}` 的 Tauri 2 权限配置：`main` 窗口需要读写 `$APPDATA/notes/**`，`settings` 窗口只需要 dialog，不允许访问文件系统；桌面和移动端都要有独立 capability，CSP 收紧到只允许本地资源和 IPC。请直接修改文件并解释取舍。",
+      "expected_output": "Capabilities are split by window and platform, the main window gets scoped notes access, the settings window gets dialog only, and the CSP allows local assets plus IPC without wildcards or unsafe-eval.",
+      "files": [],
+      "expectations": [
+        "Capability files parse as JSON or TOML",
+        "The main window has fs permissions scoped to $APPDATA/notes/** and no broader fs scope",
+        "The settings window has dialog permission but no fs permission",
+        "Desktop and mobile capabilities use the platforms field or are otherwise split by platform",
+        "CSP allows local resources and IPC and does not use * or unsafe-eval",
+        "The response explains least privilege and the allow/deny interaction"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "在 `{repo}` 的 Tauri 2 应用里接入官方 `fs`、`dialog`、`opener` 插件：用户通过对话框选一个文本文件，读取内容并显示；再提供一个按钮用系统默认程序打开一个 https 链接。要求最小权限，不允许任意命令执行。",
+      "expected_output": "The app registers the fs, dialog, and opener plugins in Rust and JavaScript, uses scoped fs permissions, and opens URLs through opener rather than shell execution.",
+      "files": [],
+      "expectations": [
+        "src-tauri/Cargo.toml includes tauri-plugin-fs, tauri-plugin-dialog, and tauri-plugin-opener",
+        "lib.rs registers the plugins with .plugin(...)",
+        "package.json includes the matching @tauri-apps/plugin-* packages",
+        "The capability includes fs read, dialog open, and opener open-url permissions",
+        "The capability does not grant shell:allow-execute or a wildcard command scope",
+        "Frontend code uses dialog open and fs readTextFile, and opens the link with the opener API",
+        "Cargo.toml and tauri.conf.json parse successfully"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "在 `{repo}` 里创建一个 Tauri 2 插件 `secure-store`：提供 `put` 和 `get` 两个命令，默认只允许 `put`，权限文件要生成 allow/deny，支持 Android/iOS 的占位实现。给出目录结构和关键文件。",
+      "expected_output": "A tauri-plugin-secure-store crate registers put and get commands, generates allow/deny permissions, defaults to put only, and contains desktop and mobile module placeholders.",
+      "files": [],
+      "expectations": [
+        "The plugin crate is named tauri-plugin-secure-store and the plugin name is secure-store",
+        "build.rs lists put and get in COMMANDS",
+        "permissions/default.toml allows put but not get",
+        "lib.rs registers both commands in generate_handler!",
+        "A guest-js or equivalent wrapper invokes plugin:secure-store|put and plugin:secure-store|get",
+        "Desktop and mobile implementation modules or cfg branches exist",
+        "All identifier names are lowercase ASCII with hyphens and no underscores",
+        "TOML files parse successfully"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "为 `{repo}` 配置 Tauri 2 的发布打包：Windows 生成 NSIS 和 MSI，macOS 生成 app 和 dmg，Linux 生成 deb/rpm/AppImage；启用自动更新并说明签名需要哪些环境变量。不要实际构建或发布。",
+      "expected_output": "The bundle config targets the requested formats, updater artifacts are enabled with a public key and HTTPS endpoint, and the response lists the Windows, macOS, and updater signing variables.",
+      "files": [],
+      "expectations": [
+        "tauri.conf.json parses and bundle.targets covers nsis, msi, app, dmg, deb, rpm, and appimage",
+        "bundle.createUpdaterArtifacts is true",
+        "plugins.updater.pubkey is key content rather than a file path",
+        "plugins.updater.endpoints uses HTTPS",
+        "The response lists TAURI_SIGNING_PRIVATE_KEY and the Windows and macOS signing variables",
+        "No build artifacts, tags, or published versions are created"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "为 `{repo}` 写 GitHub Actions 发布 workflow：在 tag `app-v*` 时构建 macOS arm64/x64、Ubuntu 22.04、Windows，使用 tauri-action，上传 draft release，并注入更新签名和平台签名 secrets。要求 action 固定到 SHA。",
+      "expected_output": "A GitHub Actions workflow builds the requested platform matrix with tauri-action pinned to a commit SHA, grants contents: write, installs Linux dependencies, and passes the release and signing environment variables.",
+      "files": [],
+      "expectations": [
+        "The workflow YAML parses",
+        "The matrix includes macOS x86_64 and aarch64, Ubuntu 22.04, and Windows",
+        "The tauri-action step is pinned to a 40-character commit SHA, not @v1 or @main",
+        "The job grants contents: write",
+        "The Linux job installs libwebkit2gtk-4.1-dev and related dependencies",
+        "The action receives GITHUB_TOKEN and TAURI_SIGNING_PRIVATE_KEY",
+        "tagName uses app-v__VERSION__ and releaseDraft is true",
+        "Release concurrency does not cancel an in-progress run"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "在 `{repo}` 的 Tauri 2 应用里加一个启动画面和一个系统托盘：主窗口先隐藏，splash 完成后显示；托盘左键显示并聚焦主窗口，菜单里有 Quit。给出配置、Rust 和必要的权限。",
+      "expected_output": "The config creates a hidden main window and a splash window, Rust closes the splash and shows main after setup, and a tray icon with a Quit menu focuses the app.",
+      "files": [],
+      "expectations": [
+        "tauri.conf.json defines a hidden main window and a splashscreen window",
+        "Rust tracks setup completion and closes the splashscreen when done",
+        "Cargo.toml enables the tray-icon feature",
+        "Rust builds a TrayIcon with a Quit menu item and handles its menu event",
+        "The tray click handler shows and focuses the main window",
+        "The capability includes core tray/menu permissions or core:default",
+        "tauri.conf.json and Cargo.toml parse successfully"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "`{repo}` 的 Tauri 2 应用出现两个问题：前端调用 `write_note` 时报 `not allowed`，以及打包后窗口白屏。请诊断并修复配置/代码，给出验证步骤。",
+      "expected_output": "The fix identifies the missing capability or command registration for write_note and the frontend/CSP/build cause of the white screen, with concrete verification steps.",
+      "files": [],
+      "expectations": [
+        "The diagnosis distinguishes app-command access from plugin permission denial",
+        "The capability or command registration fix is applied and parses",
+        "The white-screen fix addresses devUrl/frontendDist, beforeBuildCommand, or CSP",
+        "The response includes verification steps using DevTools or tauri info",
+        "No security regression such as a wildcard fs scope or unsafe-eval is introduced"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "`{repo}` 是一个拆分项目：`web/` 是独立前端，`shell/` 是 Tauri 2 + Rust 壳。请把 shell 配置成开发时连接 web 的 Vite dev server（端口 5173），打包时使用 web 的构建输出；不要使用官方模板，也不要让 shell 启动前端。给出配置、运行步骤和一个 CI 思路。",
+      "expected_output": "The shell config points devUrl at the web dev server with no beforeDevCommand and frontendDist at the web build output, and the response explains the two-process dev flow plus a CI projectPath/build-order strategy.",
+      "files": [],
+      "expectations": [
+        "shell/src-tauri/tauri.conf.json parses",
+        "build.devUrl points at the web dev server on port 5173",
+        "beforeDevCommand is absent or empty",
+        "beforeBuildCommand is absent or empty",
+        "frontendDist points at the web build output directory",
+        "The response explains running the web dev server separately and building web before the shell",
+        "The CI approach builds the frontend first and points Tauri at the shell directory",
+        "No git tags or bundle artifacts are created"
+      ]
+    }
+  ]
+}

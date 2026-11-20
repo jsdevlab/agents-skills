@@ -18,6 +18,7 @@ npx skills add jsdevlab/agents-skills
 npx skills add jsdevlab/agents-skills --skill changesets
 npx skills add jsdevlab/agents-skills --skill license
 npx skills add jsdevlab/agents-skills --skill release-plz
+npx skills add jsdevlab/agents-skills --skill tauri-v2
 ```
 
 The CLI discovers every skill under `skills/`, then lets you choose the skills and
@@ -44,6 +45,7 @@ Copy a skill directory into one of:
 | [`changesets`](skills/changesets/SKILL.md) | Create, version, and publish npm packages with Changesets: semver bumps, changelogs, `changeset version` / `changeset publish`, `changesets/action@v2` CI with npm trusted publishing, prereleases, and snapshots. | Node.js 22.11+, 24, or 26+; `@changesets/cli` v3; pnpm `>=10`, npm `>=10.9`, or yarn `>=4.5.2` |
 | [`license`](skills/license/SKILL.md) | Check and fix license headers and audit dependency licenses with Apache SkyWalking Eyes (`license-eye`): `.licenserc.yaml` configuration, `header check/fix/diff`, `dependency resolve/check`, LICENSE summaries, and GitHub Actions integration. | `license-eye` binary (release archive, `go install`, Homebrew, or Docker); Go 1.27+ if installing from source; Go, Maven, Node/npm/pnpm, Cargo, or Ruby toolchains for dependency checks |
 | [`release-plz`](skills/release-plz/SKILL.md) | Automate Rust releases with release-plz: release PRs from conventional commits, version bumps, changelogs, `cargo publish`, git tags, and GitHub/GitLab/Gitea releases. Covers `release-plz.toml`, release strategies, and CI setup with the GitHub Action or GitLab CI component. | release-plz 0.4.3+; Rust toolchain; GitHub Actions or GitLab CI; a cargo registry token for publishing |
+| [`tauri-v2`](skills/tauri-v2/SKILL.md) | Build Tauri 2 desktop and mobile apps: Rust commands and IPC, state, windows, `tauri.conf.json`, capabilities/permissions/CSP, official and custom plugins, installers, signing, app stores, auto-updates, GitHub Actions CI, and Learn recipes such as splashscreen, tray, menus, and sidecars. Includes split frontend/Tauri-shell layouts for teams that do not use the official template. | Rust 1.90+ for the updater plugin; Node.js LTS for JavaScript frontends; platform WebView/build toolchain (WebKitGTK 4.1, MSVC/WebView2, or Xcode); Android Studio/Xcode for mobile |
 
 ## Repository layout
 
@@ -67,14 +69,28 @@ skills/
 │       ├── dependency-licenses.md
 │       ├── ci.md
 │       └── troubleshooting.md
-└── release-plz/
+├── release-plz/
+│   ├── SKILL.md
+│   └── references/
+│       ├── configuration.md
+│       ├── cli.md
+│       ├── github-actions.md
+│       ├── gitlab-ci.md
+│       ├── changelog-and-semver.md
+│       └── troubleshooting.md
+└── tauri-v2/
     ├── SKILL.md
+    ├── evals/
+    │   └── evals.json
     └── references/
+        ├── development.md
         ├── configuration.md
-        ├── cli.md
-        ├── github-actions.md
-        ├── gitlab-ci.md
-        ├── changelog-and-semver.md
+        ├── security.md
+        ├── plugin-usage.md
+        ├── plugin-development.md
+        ├── distribution.md
+        ├── ci.md
+        ├── tutorials.md
         └── troubleshooting.md
 ```
 
