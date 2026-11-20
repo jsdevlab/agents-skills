@@ -17,6 +17,7 @@ npx skills add jsdevlab/agents-skills
 ```bash
 npx skills add jsdevlab/agents-skills --skill changesets
 npx skills add jsdevlab/agents-skills --skill license
+npx skills add jsdevlab/agents-skills --skill release-plz
 ```
 
 The CLI discovers every skill under `skills/`, then lets you choose the skills and
@@ -42,6 +43,7 @@ Copy a skill directory into one of:
 | --- | --- | --- |
 | [`changesets`](skills/changesets/SKILL.md) | Create, version, and publish npm packages with Changesets: semver bumps, changelogs, `changeset version` / `changeset publish`, `changesets/action@v2` CI with npm trusted publishing, prereleases, and snapshots. | Node.js 22.11+, 24, or 26+; `@changesets/cli` v3; pnpm `>=10`, npm `>=10.9`, or yarn `>=4.5.2` |
 | [`license`](skills/license/SKILL.md) | Check and fix license headers and audit dependency licenses with Apache SkyWalking Eyes (`license-eye`): `.licenserc.yaml` configuration, `header check/fix/diff`, `dependency resolve/check`, LICENSE summaries, and GitHub Actions integration. | `license-eye` binary (release archive, `go install`, Homebrew, or Docker); Go 1.27+ if installing from source; Go, Maven, Node/npm/pnpm, Cargo, or Ruby toolchains for dependency checks |
+| [`release-plz`](skills/release-plz/SKILL.md) | Automate Rust releases with release-plz: release PRs from conventional commits, version bumps, changelogs, `cargo publish`, git tags, and GitHub/GitLab/Gitea releases. Covers `release-plz.toml`, release strategies, and CI setup with the GitHub Action or GitLab CI component. | release-plz 0.4.3+; Rust toolchain; GitHub Actions or GitLab CI; a cargo registry token for publishing |
 
 ## Repository layout
 
@@ -55,13 +57,24 @@ skills/
 │       ├── ci-automation.md
 │       ├── prereleases-and-snapshots.md
 │       └── troubleshooting.md
-└── license/
+├── license/
+│   ├── SKILL.md
+│   ├── evals/
+│   │   └── evals.json
+│   └── references/
+│       ├── configuration.md
+│       ├── cli.md
+│       ├── dependency-licenses.md
+│       ├── ci.md
+│       └── troubleshooting.md
+└── release-plz/
     ├── SKILL.md
     └── references/
         ├── configuration.md
         ├── cli.md
-        ├── dependency-licenses.md
-        ├── ci.md
+        ├── github-actions.md
+        ├── gitlab-ci.md
+        ├── changelog-and-semver.md
         └── troubleshooting.md
 ```
 
