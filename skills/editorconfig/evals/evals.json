@@ -1,0 +1,73 @@
+{
+  "skill_name": "editorconfig",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "`{repo}` 是一个混合仓库：TypeScript/JavaScript 前端、Python 构建脚本、Go 服务、Makefile、Shell 和 Markdown。请创建 `.editorconfig`，让 VS Code、JetBrains 和 Vim 对缩进、换行和文件末尾保持一致；Go 和 Makefile 必须用 tab，Markdown 不要删行尾空格。不要依赖格式化工具不支持的 `max_line_length`。",
+      "expected_output": "A root .editorconfig with a UTF-8/LF/final-newline baseline, 2-space JS/TS, 4-space Python, tabs for Go and Makefile, and trailing whitespace preserved for Markdown.",
+      "files": [],
+      "expectations": [
+        ".editorconfig exists at the repository root",
+        "The preamble sets root = true",
+        "The generic [*] section sets charset utf-8, end_of_line lf, insert_final_newline true, and trim_trailing_whitespace true",
+        "JavaScript and TypeScript use 2-space indentation",
+        "Python uses 4-space indentation",
+        "Go uses indent_style = tab",
+        "Makefile uses indent_style = tab",
+        "Markdown sets trim_trailing_whitespace = false",
+        "The config does not rely on max_line_length",
+        "No line contains an inline comment after a value"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "`{repo}` 的 `.editorconfig` 和格式化工具冲突：Prettier 用 4 空格，rustfmt 用 tab。现有 `.editorconfig` 里还有行内注释，导致值解析不对，而且请不要丢掉 .NET 的 `dotnet_*` 设置。请修正并让 EditorConfig 和这两个格式化工具一致。",
+      "expected_output": "A corrected .editorconfig with no inline comments, 4-space JavaScript/TypeScript matching Prettier, tabs for Rust matching rustfmt, LF line endings, and the existing dotnet_* key preserved.",
+      "files": [],
+      "expectations": [
+        "The repaired .editorconfig exists and parses as key/value sections",
+        "No line contains an inline comment after a value",
+        "JavaScript and TypeScript use indent_style = space and indent_size = 4",
+        "Rust uses indent_style = tab",
+        "end_of_line is lf, matching Prettier",
+        "The existing dotnet_* setting is preserved",
+        "root = true remains in the preamble",
+        "NOTES.md explains that Prettier and rustfmt are the source of truth for their file types"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "`{repo}` 是一个 monorepo：根目录和 packages/ui 是 TypeScript，services/api 是 Go 服务，packages/python-lib 是 Python 包。请设计根 `.editorconfig` 和必要的嵌套配置，根目录管默认规则，Go 和 Python 只在自己的目录覆盖，不要把 `root = true` 复制到每个包，导致继承断掉。",
+      "expected_output": "A root .editorconfig with root = true and TypeScript defaults, plus nested Go and Python overrides that do not repeat root = true or duplicate the shared baseline.",
+      "files": [],
+      "expectations": [
+        "A root .editorconfig exists with root = true",
+        "The root config sets 2-space indentation for TypeScript and JSON",
+        "services/api/.editorconfig exists and sets tabs for Go",
+        "packages/python-lib/.editorconfig exists and sets 4-space indentation for Python",
+        "Neither nested config repeats root = true",
+        "The nested configs only override what differs from the root",
+        "packages/ui does not get an unnecessary nested .editorconfig",
+        "NOTES.md explains the inheritance and closer-file-wins behavior"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "`{repo}` 的编辑器设置不统一，CI 里也没有检查。请创建 `.editorconfig` 和 `editorconfig-checker` 的 CI 配置：CI 要在 PR 上失败并给出注解，不要自动改文件；排除 `vendor/` 和 `dist/`。同时修复仓库里现有的明显漂移（CRLF/LF、行尾空格、文件末尾换行、YAML 里的 tab），让第一次检查能通过。",
+      "expected_output": "A valid .editorconfig, .editorconfig-checker.json excluding vendor and dist, a pinned CI step running editorconfig-checker with GitHub annotations and no auto-fix, and repaired tracked files.",
+      "files": [],
+      "expectations": [
+        ".editorconfig exists with root = true and an LF baseline",
+        ".editorconfig-checker.json exists and excludes vendor/ and dist/",
+        "A GitHub Actions workflow runs editorconfig-checker on pull_request",
+        "The checker version is pinned to a specific release",
+        "CI uses --format github-actions and does not use --fix",
+        "src/app.js uses LF, has no trailing whitespace, and ends with a newline",
+        "config.yml contains no tab indentation",
+        "Makefile recipe lines use tabs",
+        "The config or NOTES accounts for Windows .bat line endings (CRLF or a documented reason for LF)",
+        "NOTES.md explains which editorconfig-checker fixes are safe and which are check-only"
+      ]
+    }
+  ]
+}

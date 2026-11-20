@@ -1,0 +1,72 @@
+{
+  "skill_name": "github-pr-templates",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "`{repo}` 是一个用 pnpm 管理的 Node.js CLI，支持 Node 20/22，在 Windows/macOS/Linux 上发布。项目现在没有 PR 模板。请根据仓库里的 package.json、README、CONTRIBUTING 和 CI，写一个默认 PR 模板，放到 GitHub 会从默认分支读取的位置。模板要适合 CLI 改动：让作者说明命令/参数变化、前后输出、退出码和平台测试；不要要求重复 CI 已经做的检查，也不要用 YAML frontmatter 或试图自动加 label。",
+      "expected_output": "A default pull_request_template.md tailored to the CLI, with summary, issue link, type of change, test plan using the repo's actual commands, before/after output, breaking changes, and a short checklist.",
+      "files": [],
+      "expectations": [
+        ".github/pull_request_template.md exists",
+        "The template has no YAML frontmatter",
+        "The template contains Summary, Related issue, Type of change, Test plan, Before/after output, Breaking changes, and Checklist sections",
+        "The test plan uses the repository's actual pnpm test and pnpm build commands",
+        "The template links an issue with a closing keyword such as Closes #",
+        "The template does not include a UI Screenshots section",
+        "The template does not use labels: or assignees: frontmatter",
+        "Guidance text is hidden in HTML comments",
+        "NOTES.md explains the CLI-specific section choices"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "`{repo}` 是一个 pnpm monorepo：apps/web 是 Next.js，services/api 是 Go 服务，packages/ui 是组件库。团队想要一个默认模板，再加按改动类型区分的 bug fix、feature、dependency update 模板，放到 `.github/PULL_REQUEST_TEMPLATE/`，并在 CONTRIBUTING 里给出能直接打开对应模板的链接。不要为每个 package 建模板。",
+      "expected_output": "A default PR template plus two to four named templates under .github/PULL_REQUEST_TEMPLATE/, with valid query-parameter links in CONTRIBUTING and an affected-packages section instead of per-package templates.",
+      "files": [],
+      "expectations": [
+        "A default .github/pull_request_template.md exists",
+        "At least two named templates exist under .github/PULL_REQUEST_TEMPLATE/",
+        "Named templates cover bug fix, feature, and dependency update cases",
+        "Every template is Markdown without YAML frontmatter",
+        "The default template has an Affected packages section listing the real packages",
+        "CONTRIBUTING.md contains links with quick_pull=1 and template= parameters including .md",
+        "No template is created per package",
+        "The feature template asks for screenshots or accessibility when UI changes",
+        "The dependency template asks for changelog or CI verification rather than manual version bumps",
+        "NOTES.md explains why this split avoids template sprawl"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "`{repo}` 是 Rust workspace，使用 release-plz 从 conventional commits 生成版本和 changelog。请写一个仓库级默认 PR 模板，重点让 reviewer 看到 public API 变化、semver 影响、MSRV、测试命令和迁移说明；不要要求作者手动改版本号或 CHANGELOG，因为 release-plz 会生成。模板必须放在 GitHub 会从默认分支读取的位置。",
+      "expected_output": "A Rust-specific default PR template that asks for API/semver/MSRV/migration information, uses the workspace's real cargo commands, and defers versioning and changelog generation to release-plz.",
+      "files": [],
+      "expectations": [
+        ".github/pull_request_template.md exists and has no YAML frontmatter",
+        "The template asks for public API changes and semver impact",
+        "The template mentions MSRV",
+        "The test plan uses the workspace's actual cargo test and cargo clippy commands",
+        "The template asks for migration or breaking-change notes",
+        "The template does not require a manual version bump or hand-edited CHANGELOG",
+        "The template mentions conventional commit type or scope",
+        "The template links an issue with a closing keyword"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "`{repo}` 的 PR 模板一直不对：有人看到的是 docs 里的旧版本，bugfix 链接打开后没有套用模板，模板里写的 labels 也没加上。请诊断原因并整理成一套可用的模板；保留 bugfix 模板，改好 CONTRIBUTING 里的链接，并在 NOTES.md 里解释每个问题的根因。",
+      "expected_output": "One default template remains, the bugfix named template is preserved, the CONTRIBUTING link includes the .md filename, YAML frontmatter is removed, and NOTES.md explains duplicate defaults, default-branch loading, query-parameter syntax, and the label limitation.",
+      "files": [],
+      "expectations": [
+        "Exactly one default template remains among .github/pull_request_template.md, docs/pull_request_template.md, and pull_request_template.md",
+        "The remaining default template is .github/pull_request_template.md",
+        ".github/PULL_REQUEST_TEMPLATE/bugfix.md still exists",
+        "No PR template contains YAML frontmatter or labels:/assignees: keys",
+        "CONTRIBUTING.md uses template=bugfix.md including the .md extension",
+        "NOTES.md explains that templates load from the default branch",
+        "NOTES.md explains that duplicate default templates cause the wrong one to win",
+        "NOTES.md explains that PR templates cannot apply labels or assignees"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "skill_name": "github-dependabot",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "`{repo}` 是 pnpm monorepo（apps/web + packages/ui），CI 在 `.github/workflows/ci.yml` 里还引用了几个 action。请添加 Dependabot 配置：npm 依赖每周一 09:00 Europe/Berlin 检查，production 和 development 的 minor/patch 分组，GitHub Actions 每月检查。只使用 `.github/labels.yml` 里已有的 label，不要新建 label。写完后说明如何验证它生效。",
+      "expected_output": "A valid .github/dependabot.yml covering the npm workspace directories and GitHub Actions, with the requested schedule, production/development groups, and only existing labels.",
+      "files": [],
+      "expectations": [
+        ".github/dependabot.yml exists and parses as YAML",
+        "The file has version: 2 and a non-empty updates list",
+        "An npm update entry covers the workspace root directory",
+        "The npm schedule is weekly on Monday at 09:00 Europe/Berlin",
+        "Groups exist for production and development with minor and patch update types",
+        "A github-actions update entry exists with a monthly schedule",
+        "Every label used in the config exists in .github/labels.yml",
+        "The config does not use package-ecosystem: pnpm",
+        "NOTES.md explains how to verify the config in the dependency graph page"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "`{repo}` 有 Rust workspace（根 Cargo.toml + crates/*）、根目录 Dockerfile、infra/ 下的 Terraform。请配置 Dependabot：Rust 每周检查并只把 patch 更新分组；Docker 和 Terraform 放进一个 multi-ecosystem group，每周一次，统一加 infrastructure 和 dependencies 标签；major 版本先冷却 30 天。配置要能通过 GitHub 的 schema 校验。",
+      "expected_output": "A valid Dependabot config with cargo at the workspace root, patch-only grouping, a Docker/Terraform multi-ecosystem group, existing labels, and a 30-day major-version cooldown.",
+      "files": [],
+      "expectations": [
+        ".github/dependabot.yml exists, parses as YAML, and has version: 2",
+        "A cargo update entry covers the workspace root at /",
+        "The cargo group contains only patch update types",
+        "A multi-ecosystem-groups entry named infrastructure has a weekly schedule and labels infrastructure and dependencies",
+        "Both docker and terraform update entries reference the infrastructure multi-ecosystem group",
+        "Both multi-ecosystem update entries define patterns",
+        "A cooldown sets semver-major-days to 30",
+        "Every label used exists in .github/labels.yml",
+        "No second dependabot.yml exists in the repository",
+        "NOTES.md explains the multi-ecosystem group and cooldown tradeoffs"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "`{repo}` 现在 Dependabot 版本更新 PR 太多，团队只想保留安全更新：把版本更新 PR 关掉，但 security updates 继续工作，并尽量把 patch/minor 的安全更新合并成一个 PR。现有的 `.github/dependabot.yml` 可以改。还要说明哪些设置必须在 GitHub 仓库设置里打开，YAML 本身能不能启用安全更新。",
+      "expected_output": "The config disables version-update PRs with open-pull-requests-limit: 0 for every ecosystem and groups patch/minor security updates, with NOTES.md correctly explaining that alerts and security updates must be enabled in repository settings.",
+      "files": [],
+      "expectations": [
+        ".github/dependabot.yml parses as YAML and keeps version: 2",
+        "Every update entry sets open-pull-requests-limit to 0",
+        "A security group uses applies-to: security-updates",
+        "The security group covers minor and patch updates",
+        "The config does not invent a YAML key that enables security updates",
+        "NOTES.md says Dependabot alerts and security updates must be enabled in repository settings",
+        "NOTES.md says the YAML file alone cannot enable security updates",
+        "NOTES.md mentions the separate fixed limit of 10 security-update PRs"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "`{repo}` 的 Dependabot 配置没有生效，PR 也没按预期自动合并。请检查 `.github/dependabot.yml`、根目录的另一个 `dependabot.yml`、`apps/*` 的 package.json 和 labels 文件，修好配置并解释每个问题；如果自动合并需要别的方式，给出可用的做法。",
+      "expected_output": "A single valid Dependabot config using the npm ecosystem, non-overlapping directory entries with globbing only under directories, existing labels, and an explanation that @dependabot merge is unsupported and auto-merge must use GitHub's auto-merge or a workflow.",
+      "files": [],
+      "expectations": [
+        "Only one dependabot.yml remains in the repository",
+        "The remaining config parses as YAML and uses version: 2",
+        "The invalid pnpm ecosystem is replaced with npm, and no pnpm entry remains",
+        "No single directory value contains a glob; globbing is only used under directories",
+        "The npm entries no longer overlap for the same target branch",
+        "Every label used exists in .github/labels.yml",
+        "NOTES.md explains that directory does not support globbing",
+        "NOTES.md explains that @dependabot merge is not a supported command",
+        "NOTES.md recommends gh pr merge --auto or a GitHub auto-merge workflow",
+        "NOTES.md explains that only one dependabot.yml is used"
+      ]
+    }
+  ]
+}
