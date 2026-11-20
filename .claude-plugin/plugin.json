@@ -1,0 +1,23 @@
+{
+  "name": "agents-skills",
+  "version": "0.1.0",
+  "description": "Nine skills for GitHub workflows, releases, licensing, Tauri apps, and editor configuration.",
+  "author": {
+    "name": "jsdevlab",
+    "url": "https://github.com/jsdevlab"
+  },
+  "homepage": "https://github.com/jsdevlab/agents-skills",
+  "repository": "https://github.com/jsdevlab/agents-skills",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "github",
+    "dependabot",
+    "editorconfig",
+    "release-plz",
+    "changesets",
+    "tauri",
+    "license",
+    "ci-cd"
+  ]
+}

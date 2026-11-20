@@ -36,6 +36,22 @@ npx skills add ./skills                    # all skills
 npx skills add ./skills --skill changesets # one skill
 ```
 
+### As a Claude Code plugin
+
+This repository is also a Claude Code plugin. All nine skills under `skills/` are
+auto-discovered.
+
+```bash
+/plugin marketplace add jsdevlab/agents-skills
+/plugin install agents-skills@agents-skills
+```
+
+For local plugin development:
+
+```bash
+claude --plugin-dir .
+```
+
 ### Manual install
 
 Copy a skill directory into one of:
@@ -58,6 +74,16 @@ Copy a skill directory into one of:
 | [`tauri-v2`](skills/tauri-v2/SKILL.md) | Build Tauri 2 desktop and mobile apps: Rust commands and IPC, state, windows, `tauri.conf.json`, capabilities/permissions/CSP, official and custom plugins, installers, signing, app stores, auto-updates, GitHub Actions CI, and Learn recipes such as splashscreen, tray, menus, and sidecars. Includes split frontend/Tauri-shell layouts for teams that do not use the official template. | Rust 1.90+ for the updater plugin; Node.js LTS for JavaScript frontends; platform WebView/build toolchain (WebKitGTK 4.1, MSVC/WebView2, or Xcode); Android Studio/Xcode for mobile |
 
 ## Repository layout
+
+The Claude Code plugin manifest lives in `.claude-plugin/`:
+
+```text
+.claude-plugin/
+├── plugin.json
+└── marketplace.json
+```
+
+The skills themselves remain under `skills/`:
 
 ```text
 skills/
@@ -171,10 +197,15 @@ are git-ignored.
    npx skills add ./skills --list
    ```
 
+5. The Claude Code plugin discovers the same `skills/` tree. After adding or
+   renaming a skill, run `claude plugin validate .`.
+
 ## Publishing checklist
 
-- [ ] Push to `jsdevlab/agents-skills` on GitHub
+- [ ] Commit and push `.claude-plugin/` and `README.md` to `jsdevlab/agents-skills` on GitHub
 - [ ] Verify `npx skills add ./skills --list` lists every skill
+- [ ] Run `claude plugin validate .` and resolve any errors
+- [ ] Keep the version in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` in sync
 - [x] Include the MIT `LICENSE`
 - [ ] Optionally add the skills.sh badge:
       `[![skills.sh](https://skills.sh/b/jsdevlab/agents-skills)](https://skills.sh/jsdevlab/agents-skills)`
