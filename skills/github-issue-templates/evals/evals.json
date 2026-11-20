@@ -3,7 +3,7 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "在 `{repo}` 里根据项目内容创建 GitHub issue 模板：一个 bug report 表单和一个 feature request 表单，再加 `config.yml`。项目是 Node.js CLI，支持 Node 20/22，Windows/macOS/Linux；bug 表单要问版本、系统、复现步骤、日志和截图；feature 表单要问问题和方案。只使用仓库已有的 labels，不要创建新 label。",
+      "prompt": "在 `{repo}` 里根据项目内容创建 GitHub issue 模板：一个 bug report 表单和一个 feature request 表单，再加 `config.yml`。项目是 Node.js CLI，支持 Node 22/24，Windows/macOS/Linux；bug 表单要问版本、系统、复现步骤、日志和截图；feature 表单要问问题和方案。只使用仓库已有的 labels，不要创建新 label。",
       "expected_output": "Valid bug and feature issue forms exist with project-specific fields, config.yml disables blank issues and links a private security channel, and every template label exists in .github/labels.yml.",
       "files": [],
       "expectations": [

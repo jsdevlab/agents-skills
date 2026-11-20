@@ -3,7 +3,7 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "`{repo}` 是一个用 pnpm 管理的 Node.js CLI，支持 Node 20/22，在 Windows/macOS/Linux 上发布。项目现在没有 PR 模板。请根据仓库里的 package.json、README、CONTRIBUTING 和 CI，写一个默认 PR 模板，放到 GitHub 会从默认分支读取的位置。模板要适合 CLI 改动：让作者说明命令/参数变化、前后输出、退出码和平台测试；不要要求重复 CI 已经做的检查，也不要用 YAML frontmatter 或试图自动加 label。",
+      "prompt": "`{repo}` 是一个用 pnpm 管理的 Node.js CLI，支持 Node 22/24，在 Windows/macOS/Linux 上发布。项目现在没有 PR 模板。请根据仓库里的 package.json、README、CONTRIBUTING 和 CI，写一个默认 PR 模板，放到 GitHub 会从默认分支读取的位置。模板要适合 CLI 改动：让作者说明命令/参数变化、前后输出、退出码和平台测试；不要要求重复 CI 已经做的检查，也不要用 YAML frontmatter 或试图自动加 label。",
       "expected_output": "A default pull_request_template.md tailored to the CLI, with summary, issue link, type of change, test plan using the repo's actual commands, before/after output, breaking changes, and a short checklist.",
       "files": [],
       "expectations": [

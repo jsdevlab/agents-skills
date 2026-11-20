@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version: "stable"
       - run: go install github.com/editorconfig-checker/editorconfig-checker/v4/cmd/editorconfig-checker@v4.0.2
@@ -116,6 +116,7 @@ jobs:
 - Run it on pull requests and the default branch.
 - `--format github-actions` produces inline annotations.
 - Do not auto-fix in CI; fail and let the contributor or a formatter fix it.
+- Use current action majors: `actions/checkout@v7` and `actions/setup-go@v7` run on the runner's Node 24 runtime. Node 20 and action majors declaring `runs.using: node20` are not supported on GitHub-hosted runners after 2026-09-23.
 
 ## Formatter alignment
 

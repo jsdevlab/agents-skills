@@ -179,7 +179,19 @@ jobs:
 
 Notes:
 
-- **pnpm projects:** replace the Node/install steps with `pnpm/action-setup@v4` plus `actions/setup-node@v7` (with `cache: pnpm`) and `pnpm install --frozen-lockfile`. Keep the Changesets action steps unchanged.
+- **pnpm projects:** replace the separate Node/pnpm setup and install steps with `pnpm/setup@v3`:
+
+  ```yaml
+  - uses: pnpm/setup@v3
+    with:
+      version: 12
+      runtime: node@24
+      cache: true
+      require-lockfile: true
+  ```
+
+  It installs pnpm 11+ and the requested Node runtime, then runs `pnpm install` by default. Drop the separate `actions/setup-node` and `pnpm install` steps; set `install: false` only if a later step handles installation. Keep the Changesets action steps unchanged.
+- `actions/checkout@v7` and `pnpm/setup@v3` run on the runner's Node 24 runtime. Do not use older action majors that still declare `node20`; Node 20 was removed from GitHub-hosted runners on 2026-09-23.
 - `id-token: write` belongs only on the publish job. Splitting build/test/publish is a security improvement recommended by npm.
 - Optionally add a GitHub Environment with required reviewers to the `publish` job so a maintainer must approve each publish.
 - The official docs' snippets use `actions/checkout@v7`, `actions/setup-node@v7`, and Node 24; keep action versions current in your repository.

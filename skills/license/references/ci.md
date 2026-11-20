@@ -124,13 +124,16 @@ jobs:
           token: ""
 
       - name: Commit fixes
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@v11
         with:
           author_name: License Bot
           author_email: license-bot@users.noreply.github.com
           message: 'chore: apply license headers'
           default_author: github_actions
 ```
+
+`EndBug/add-and-commit@v11` runs on Node 24; v9 still declares `node20` and is
+not supported on GitHub-hosted runners after 2026-09-23.
 
 Caveats:
 
@@ -180,7 +183,7 @@ jobs:
       - uses: actions/setup-node@v7
         if: hashFiles('package.json') != ''
         with:
-          node-version: '22'
+          node-version: '24'
           cache: npm   # or pnpm / yarn
 
       - uses: dtolnay/rust-toolchain@stable

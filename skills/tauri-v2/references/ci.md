@@ -58,7 +58,7 @@ jobs:
             librsvg2-dev \
             patchelf
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: lts/*
           cache: npm
@@ -117,6 +117,24 @@ The documented core inputs are `tagName`, `releaseName`, `releaseBody`, `release
 - `retryAttempts` retries flaky release uploads.
 
 The action README is the source of truth for the full list: <https://github.com/tauri-apps/tauri-action>.
+
+Use current action majors: `actions/checkout@v7`, `actions/setup-node@v7`, and
+`tauri-apps/tauri-action@v1.0.0`. `actions/setup-node@v7` runs on Node 24; Node
+20 and action majors declaring `runs.using: node20` are not supported on
+GitHub-hosted runners after 2026-09-23. For pnpm, use `pnpm/setup@v3` instead
+of `pnpm/action-setup`; it installs pnpm 11+ and Node in one step, for example:
+
+```yaml
+- uses: pnpm/setup@v3
+  with:
+    version: 12
+    runtime: node@24
+    cache: true
+    require-lockfile: true
+```
+
+It runs `pnpm install` by default, so drop the separate `actions/setup-node`
+and `pnpm install` steps, or set `install: false` if a later step handles it.
 
 ### Concurrency
 
@@ -200,7 +218,7 @@ jobs:
         with:
           workspaces: './src-tauri -> target'
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: lts/*
           cache: npm
@@ -284,7 +302,7 @@ jobs:
         with:
           repository: owner/app-shell
           path: app-shell
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: lts/*
       - run: npm ci && npm run build

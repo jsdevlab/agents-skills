@@ -121,7 +121,7 @@ Use multiple templates only when the questions differ materially:
 ## Cooperation with other skills
 
 - **Issue templates** (`github-issue-templates`): link the issue with `Closes #...`; do not duplicate the entire bug form in the PR template.
-- **Labels** (`github-labels`): PR templates cannot apply labels. Use the `labels` query parameter for a prefilled link, or a workflow such as `actions/labeler` for path-based labels.
+- **Labels** (`github-labels`): PR templates cannot apply labels. Use the `labels` query parameter for a prefilled link, or a workflow such as `actions/labeler@v7` for path-based labels.
 - **Changesets** (`changesets`): in an npm package that uses Changesets, ask whether a changeset was added and which packages it covers.
 - **release-plz** (`release-plz`): in a Rust workspace, version bumps and changelogs are generated from conventional commits; ask for the commit type/scope rather than a manual version bump.
 

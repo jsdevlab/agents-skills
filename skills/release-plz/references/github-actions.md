@@ -202,7 +202,7 @@ Use a PAT or GitHub App token when you need release-plz's PR/tag to trigger othe
 **GitHub App** (used by the release-plz project itself):
 
 ```yaml
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         id: app-token
         with:
           app-id: ${{ secrets.APP_ID }}
@@ -217,6 +217,8 @@ Use a PAT or GitHub App token when you need release-plz's PR/tag to trigger othe
 ```
 
 App permissions: Contents read/write, Pull requests read/write; add Administration read/write only if you use protected tags. Install the App only on the repositories that need it.
+
+`actions/create-github-app-token@v3` runs on Node 24 and keeps the same `app-id` and `private-key` inputs. v2 declares `node20` and is not supported on GitHub-hosted runners after 2026-09-23.
 
 ### PAT account identity
 

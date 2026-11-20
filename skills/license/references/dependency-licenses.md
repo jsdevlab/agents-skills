@@ -109,7 +109,7 @@ Side effects and caveats:
 
 pnpm is selected when either of these is true, checked in the `package.json`'s directory and then each parent:
 
-- the `packageManager` field names pnpm (for example `"pnpm@10.0.0"`), or
+- the `packageManager` field names pnpm (for example `"pnpm@12.0.0"`), or
 - a `pnpm-lock.yaml` exists.
 
 Behavior:

@@ -65,7 +65,7 @@ PR templates cannot set labels, assignees, milestones, or projects. Options:
   ```text
   ...?quick_pull=1&template=bug_fix.md&labels=bug,needs+review
   ```
-- Use a path-based labeler workflow such as `actions/labeler` to apply labels from changed files.
+- Use a path-based labeler workflow such as `actions/labeler@v7` to apply labels from changed files.
 - Use a workflow that reads the PR body or title and applies labels through the API.
 - Document the limitation so contributors do not expect the template to categorize the PR.
 

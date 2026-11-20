@@ -59,6 +59,18 @@ Copy a skill directory into one of:
 - `~/.claude/skills/<name>/` — available in all projects
 - `<your-project>/.claude/skills/<name>/` — available in that project
 
+## CI version policy
+
+CI examples in these skills use current action majors and a supported Node LTS.
+GitHub-hosted runners removed Node 20 on 2026-09-23; do not use Node 20 or
+action majors that still declare `runs.using: node20`. JavaScript actions must
+run on Node 24 or newer.
+
+Current majors used in the examples include `actions/checkout@v7`,
+`actions/setup-node@v7`, `actions/setup-go@v7`, `actions/setup-python@v7`,
+`actions/setup-java@v6`, `pnpm/setup@v3` (pnpm 11+),
+`actions/create-github-app-token@v3`, and `EndBug/add-and-commit@v11`.
+
 ## Skills
 
 | Skill | What it does | Requirements |
