@@ -204,7 +204,7 @@ Full option details and recipes: `references/config.md`.
 
 ## CI automation
 
-The standard setup uses `changesets/action@v2`: on pushes to the base branch it opens/updates a "Version Packages" PR when changesets exist, and publishes when the version PR is merged. To require changesets on PRs, run `CHANGESET status --since main` as a check (blocking), or use the Changesets GitHub Bot / `changesets/action/pr-status` (non-blocking).
+The standard setup uses `changesets/action` v2 (pin its commit SHA in workflows): on pushes to the base branch it opens/updates a "Version Packages" PR when changesets exist, and publishes when the version PR is merged. To require changesets on PRs, run `CHANGESET status --since main` as a check (blocking), or use the Changesets GitHub Bot / `changesets/action/pr-status` (non-blocking).
 
 Two prerequisites are easy to miss:
 

@@ -92,10 +92,10 @@ steps:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-`dependabot/fetch-metadata@v3.1.0` runs on Node 24; v2 still declares `node20`
-and is not supported on GitHub-hosted runners after 2026-09-23. Check the
-action's current README for inputs/outputs and required permissions. Do not
-auto-merge major updates without a migration review.
+The pinned SHA is `dependabot/fetch-metadata` v3.1.0, which runs on Node 24;
+v2 still declares `node20` and is not supported on GitHub-hosted runners after
+2026-09-23. Check the action's current README for inputs/outputs and required
+permissions. Do not auto-merge major updates without a migration review.
 
 ## Grouped PRs
 

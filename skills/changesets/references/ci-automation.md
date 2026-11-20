@@ -3,7 +3,7 @@
 There are two independent questions to answer:
 
 1. **How do PRs get changesets?** Either non-blocking (a bot/comment) or blocking (`changeset status --since main`).
-2. **How do version and publish run?** Normally with `changesets/action@v2`, which opens a "Version Packages" PR and publishes when that PR merges.
+2. **How do version and publish run?** Normally with `changesets/action` v2 (SHA-pinned in the examples), which opens a "Version Packages" PR and publishes when that PR merges.
 
 ## Prerequisites
 
@@ -38,9 +38,9 @@ jobs:
     outputs:
       comment-body: ${{ steps.pr-status.outputs.comment-body }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: pr-status
-        uses: changesets/action/pr-status@v2
+        uses: changesets/action/pr-status@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
 
   pr-comment:
     needs: pr-status
@@ -48,7 +48,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: changesets/action/pr-comment@v2
+      - uses: changesets/action/pr-comment@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           body: ${{ needs.pr-status.outputs.comment-body }}
 ```
@@ -103,15 +103,15 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
       - run: npm install
       - id: select-mode
-        uses: changesets/action/select-mode@v2
+        uses: changesets/action/select-mode@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
 
   version:
     if: needs.select-mode.outputs.mode == 'version'
@@ -123,16 +123,16 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           package-manager-cache: false
       - run: npm install
       - id: version
-        uses: changesets/action/version@v2
+        uses: changesets/action/version@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
 
   pack:
     if: needs.select-mode.outputs.mode == 'publish'
@@ -143,17 +143,17 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           package-manager-cache: false
       - run: npm install
       - run: npm run build
       - id: pack
-        uses: changesets/action/pack@v2
+        uses: changesets/action/pack@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           publish-plan-artifact-id: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
 
@@ -164,25 +164,25 @@ jobs:
       contents: write
       id-token: write # only this job needs OIDC for trusted publishing
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           package-manager-cache: false
       - run: npm install
-      - uses: changesets/action/publish@v2
+      - uses: changesets/action/publish@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           pack-dir-artifact-id: ${{ needs.pack.outputs.pack-dir-artifact-id }}
 ```
 
 Notes:
 
-- **pnpm projects:** replace the separate Node/pnpm setup and install steps with `pnpm/setup@v3`:
+- **pnpm projects:** replace the separate Node/pnpm setup and install steps with `pnpm/setup` v3 (SHA below):
 
   ```yaml
-  - uses: pnpm/setup@v3
+  - uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
     with:
       version: 12
       runtime: node@24
@@ -191,10 +191,10 @@ Notes:
   ```
 
   It installs pnpm 11+ and the requested Node runtime, then runs `pnpm install` by default. Drop the separate `actions/setup-node` and `pnpm install` steps; set `install: false` only if a later step handles installation. Keep the Changesets action steps unchanged.
-- `actions/checkout@v7` and `pnpm/setup@v3` run on the runner's Node 24 runtime. Do not use older action majors that still declare `node20`; Node 20 was removed from GitHub-hosted runners on 2026-09-23.
+- The pinned SHAs for `actions/checkout` v7.0.1 and `pnpm/setup` v3.2.0 run on the runner's Node 24 runtime. Do not use older action majors that still declare `node20`; Node 20 was removed from GitHub-hosted runners on 2026-09-23.
 - `id-token: write` belongs only on the publish job. Splitting build/test/publish is a security improvement recommended by npm.
 - Optionally add a GitHub Environment with required reviewers to the `publish` job so a maintainer must approve each publish.
-- The official docs' snippets use `actions/checkout@v7`, `actions/setup-node@v7`, and Node 24; keep action versions current in your repository.
+- The examples pin the `actions/checkout` v7.0.1 and `actions/setup-node` v7.1.0 SHAs; the official docs may show v7 tags. Keep action SHAs current in your repository.
 
 ### First publish and trusted publishing
 
@@ -219,15 +219,15 @@ Token-based publishing with granular access tokens is no longer recommended: tok
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org/
           package-manager-cache: false
       - run: npm install
       - run: npm run build
-      - uses: changesets/action/publish@v2
+      - uses: changesets/action/publish@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
@@ -256,14 +256,14 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           package-manager-cache: false
       - run: npm install
       - run: npm run build
-      - uses: changesets/action@v2
+      - uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
 ```
 
 The unified `changesets/action@v2` opens the version PR and, by default, also publishes when there are no changesets. For version-only behavior, use the `changesets/action/version@v2` sub-action instead of the unified action, or configure the action to skip publishing. Check the action's current inputs for your version.
@@ -274,7 +274,7 @@ For private packages or when a separate tag-triggered workflow publishes artifac
 
 1. Set `"private": true` in each package's `package.json`.
 2. Set `"privatePackages": { "version": true, "tag": true }` in `.changeset/config.json`.
-3. Run the publish job without npm authentication; `changesets/action/publish@v2` creates tags, and downstream workflows react to them.
+3. Run the publish job without npm authentication; the SHA-pinned `changesets/action/publish` v2 creates tags, and downstream workflows react to them.
 
 Use `changeset git-tag` manually if a different tool publishes packages.
 
@@ -304,7 +304,7 @@ The environment-variable indirection is safer than storing the token in `.npmrc`
 PRs created with the default `GITHUB_TOKEN` do not trigger other workflows. If the version PR must run CI (tests, checks, or a publish workflow), create a GitHub App token or use a PAT and pass it to the action:
 
 ```yaml
-- uses: actions/create-github-app-token@v3
+- uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3.4.0
   id: app-token
   with:
     client-id: ${{ vars.APP_CLIENT_ID }}
@@ -312,7 +312,7 @@ PRs created with the default `GITHUB_TOKEN` do not trigger other workflows. If t
     permission-contents: write
     permission-pull-requests: write
 
-- uses: changesets/action/version@v2
+- uses: changesets/action/version@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
   with:
     github-token: ${{ steps.app-token.outputs.token }}
 ```

@@ -2,7 +2,7 @@
 
 The action is `release-plz/action`. It is a composite action that installs `cargo-semver-checks`, `cargo-binstall`, and the requested release-plz CLI version, configures the git user from the token, and runs `release-plz release-pr` and/or `release-plz release`.
 
-Examples here use `release-plz/action@1fb72a9583c3601c197b3bd6fc6ce50d58e28ef3` (commit for **v0.5.148**). That action defaults to release-plz **0.4.3**. Pin a different CLI with the `version` input.
+Examples here use `release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b` (full commit for **v0.5.148**). That action defaults to release-plz **0.4.3**. Pin a different CLI with the `version` input.
 
 ## Contents
 
@@ -44,16 +44,16 @@ jobs:
       pull-requests: read    # inspect the release PR and its commits
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0             # full history is required
           persist-credentials: false
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable branch
 
       - name: Run release-plz
-        uses: release-plz/action@1fb72a9583c3601c197b3bd6fc6ce50d58e28ef3 # v0.5.148
+        uses: release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b # v0.5.148
         with:
           command: release
         env:
@@ -72,16 +72,16 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable branch
 
       - name: Run release-plz
-        uses: release-plz/action@1fb72a9583c3601c197b3bd6fc6ce50d58e28ef3 # v0.5.148
+        uses: release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b # v0.5.148
         with:
           command: release-pr
         env:
@@ -91,7 +91,8 @@ jobs:
 
 - `fetch-depth: 0` is required. A shallow checkout breaks commit analysis and release-PR detection.
 - The `if: github.repository_owner == 'your-org'` guard prevents fork pushes from trying to release. Replace `your-org`.
-- `actions/checkout@v7` is current; v6 works the same for these inputs.
+- The examples pin `actions/checkout` v7.0.1; v6 works the same for these inputs.
+- `dtolnay/rust-toolchain` is pinned to the `stable` branch commit; its default `toolchain` input remains `stable`, so Rust itself still tracks the latest stable release.
 - The PR job's concurrency group is deliberately non-canceling: a second push waits for the first PR update instead of racing it.
 - The release job has no canceling concurrency group. A canceled release can be skipped.
 
@@ -133,7 +134,7 @@ Example: read outputs and use them in a follow-up step:
 ```yaml
       - name: Run release-plz
         id: release-plz
-        uses: release-plz/action@1fb72a9583c3601c197b3bd6fc6ce50d58e28ef3 # v0.5.148
+        uses: release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b # v0.5.148
         with:
           command: release
         env:
@@ -186,12 +187,12 @@ Use a PAT or GitHub App token when you need release-plz's PR/tag to trigger othe
 - Store as `RELEASE_PLZ_TOKEN` and pass it to both `actions/checkout` (if git pushes) and the release-plz step:
 
 ```yaml
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: release-plz/action@1fb72a9583c3601c197b3bd6fc6ce50d58e28ef3 # v0.5.148
+      - uses: release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b # v0.5.148
         with:
           command: release-pr
         env:
@@ -202,13 +203,13 @@ Use a PAT or GitHub App token when you need release-plz's PR/tag to trigger othe
 **GitHub App** (used by the release-plz project itself):
 
 ```yaml
-      - uses: actions/create-github-app-token@v3
+      - uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3.4.0
         id: app-token
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      - uses: release-plz/action@1fb72a9583c3601c197b3bd6fc6ce50d58e28ef3 # v0.5.148
+      - uses: release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b # v0.5.148
         with:
           command: release-pr
         env:
@@ -218,7 +219,7 @@ Use a PAT or GitHub App token when you need release-plz's PR/tag to trigger othe
 
 App permissions: Contents read/write, Pull requests read/write; add Administration read/write only if you use protected tags. Install the App only on the repositories that need it.
 
-`actions/create-github-app-token@v3` runs on Node 24 and keeps the same `app-id` and `private-key` inputs. v2 declares `node20` and is not supported on GitHub-hosted runners after 2026-09-23.
+The pinned SHA is `actions/create-github-app-token` v3.4.0; it runs on Node 24 and keeps the same `app-id` and `private-key` inputs. v2 declares `node20` and is not supported on GitHub-hosted runners after 2026-09-23.
 
 ### PAT account identity
 
@@ -240,7 +241,7 @@ crates.io trusted publishing lets the release job obtain a short-lived token via
 ```
 
 ```yaml
-      - uses: release-plz/action@1fb72a9583c3601c197b3bd6fc6ce50d58e28ef3 # v0.5.148
+      - uses: release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b # v0.5.148
         with:
           command: release
         env:
@@ -275,7 +276,7 @@ Set `persist-credentials: true` when:
 When persisting credentials, also pass the token to checkout if you use a PAT:
 
 ```yaml
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -299,7 +300,7 @@ Prefer running tests/lints on PRs and merging only green PRs. If a release job m
 
 ```yaml
       - run: cargo test --workspace
-      - uses: release-plz/action@... # command: release
+      - uses: release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b # v0.5.148; command: release
 ```
 
 This delays the release job and serializes checks with publishing; the PR-based approach runs them in parallel.
@@ -345,7 +346,7 @@ Use `--merge` (not squash) when `release_always = false`; the release PR commit 
 ### Commit files to the release PR
 
 ```yaml
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -394,7 +395,7 @@ The rest of the workflow is unchanged. Scheduled runs are useful for dependency-
 ### Submodules
 
 ```yaml
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -426,5 +427,5 @@ GitHub Enterprise Server is supported. release-plz derives the API host from the
 | `release` fails with `git release not configured` | The CLI/action needs a forge token. In the action, set `GITHUB_TOKEN`; in CLI use `--git-token`/`--forge`. |
 | `cargo publish` fails with auth | `CARGO_REGISTRY_TOKEN` missing/invalid; for private registries use `CARGO_REGISTRIES_<NAME>_TOKEN`. |
 | Trusted publishing fails | `id-token: write` missing, crates.io trusted publishing not configured, or the crate has never been published (new crates need a manual first publish). |
-| Action starts behaving differently | Pin the action SHA and the `version` input; the floating `@v0.5` changes with every release. |
+| Action starts behaving differently | Pin the full action SHA and the `version` input; the floating `@v0.5` changes with every release. |
 | Release job canceled mid-publish | Remove `concurrency` from the release job; do not cancel publishing. |

@@ -185,7 +185,7 @@ If tags were created for the wrong commit, delete them locally and remotely and 
 Checklist:
 
 1. **Runtime:** Node `^22.11 || ^24 || >=26`; pnpm `>=10`, npm `>=10.9`, yarn `>=4.5.2`. Yarn Classic is unsupported. Packages are ESM.
-2. **GitHub Action:** upgrade to `changesets/action@v2` (v1 does not work with v3). Rename inputs: `version` → `version-script`, `publish` → `publish-script`, `commit` → `commit-message`, `title` → `pr-title`.
+2. **GitHub Action:** upgrade to `changesets/action` v2 and pin its commit SHA (v1 does not work with v3). Rename inputs: `version` → `version-script`, `publish` → `publish-script`, `commit` → `commit-message`, `title` → `pr-title`.
 3. **Exit code:** `version` now exits 1 when there are no changesets; update scripts and snapshot jobs.
 4. **Config:** `prettier` → `format`; `access: "private"` → `"restricted"`; snapshots option moved to `snapshot.useCalculatedVersion`; private packages are no longer versioned by default.
 5. **CLI:** `changeset tag` → `changeset git-tag`; `--sinceMaster` → `--since`.

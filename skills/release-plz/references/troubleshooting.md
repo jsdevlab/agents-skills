@@ -146,7 +146,7 @@ Symptom: empty changelog, wrong version, "cannot find the last release", or no r
 Set `persist-credentials: true` and pass the token to checkout:
 
 ```yaml
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: true
@@ -157,7 +157,7 @@ release-plz falls back to the git CLI for signed tags because the GitHub API can
 
 ### The action starts failing after a release
 
-Pin the action to a commit SHA (or an exact version) and pin the CLI with the `version` input. Floating `@v0.5` picks up new action releases automatically.
+Pin the action to a full commit SHA and pin the CLI with the `version` input. A floating `@v0.5` picks up new action releases automatically.
 
 ### Trusted publishing fails
 

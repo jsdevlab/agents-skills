@@ -46,7 +46,7 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Linux dependencies
         if: matrix.platform == 'ubuntu-22.04'
@@ -58,22 +58,22 @@ jobs:
             librsvg2-dev \
             patchelf
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: lts/*
           cache: npm
 
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable branch
         with:
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
-      - uses: swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
           workspaces: './src-tauri -> target'
 
       - run: npm ci
 
-      - uses: tauri-apps/tauri-action@2d793bf2c8c505b9b76211601b09aab48922225d # v1.0.0
+      - uses: tauri-apps/tauri-action@1deb371b0cd8bd54025b384f1cd735e725c4060f # v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
@@ -93,7 +93,8 @@ Notes:
 - Use `releaseDraft: true` for the first runs and publish manually after checking artifacts.
 - `fail-fast: false` lets other platforms finish if one fails.
 - `permissions: contents: write` is required to create releases. Without it you get `Resource not accessible by integration`.
-- Pin third-party actions to a commit SHA in production. The SHA above is `tauri-action` v1.0.0; replace it with the version you audit.
+- Pin third-party actions to a full commit SHA in production. The SHA above is `tauri-action` v1.0.0; replace it with the version you audit.
+- `dtolnay/rust-toolchain` is pinned to the `stable` branch commit; its default `toolchain` input remains `stable`, so Rust itself still tracks the latest stable release.
 - On private repositories, `ubuntu-22.04-arm` and `ubuntu-24.04-arm` hosted runners may not be available; use QEMU or build ARM on matching hardware.
 - `args` is passed through to `tauri build`; add `--bundles nsis` or `--target ...` as needed.
 - For multiple package managers, change `cache` and the install command (`pnpm install --frozen-lockfile`, `yarn install --immutable`).
@@ -118,14 +119,15 @@ The documented core inputs are `tagName`, `releaseName`, `releaseBody`, `release
 
 The action README is the source of truth for the full list: <https://github.com/tauri-apps/tauri-action>.
 
-Use current action majors: `actions/checkout@v7`, `actions/setup-node@v7`, and
-`tauri-apps/tauri-action@v1.0.0`. `actions/setup-node@v7` runs on Node 24; Node
-20 and action majors declaring `runs.using: node20` are not supported on
-GitHub-hosted runners after 2026-09-23. For pnpm, use `pnpm/setup@v3` instead
+The examples pin full commit SHAs for `actions/checkout` v7.0.1,
+`actions/setup-node` v7.1.0, and `tauri-apps/tauri-action` v1.0.0; keep the
+`# vX.Y.Z` comments informational. `actions/setup-node` v7 runs on Node 24;
+Node 20 and action majors declaring `runs.using: node20` are not supported on
+GitHub-hosted runners after 2026-09-23. For pnpm, use `pnpm/setup` v3 instead
 of `pnpm/action-setup`; it installs pnpm 11+ and Node in one step, for example:
 
 ```yaml
-- uses: pnpm/setup@v3
+- uses: pnpm/setup@731dfb6463bbd11c11fd0ee11fe00ed0e36d48a1 # v3.2.0
   with:
     version: 12
     runtime: node@24
@@ -199,7 +201,7 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Linux dependencies
         run: |
@@ -210,15 +212,15 @@ jobs:
             librsvg2-dev \
             patchelf
 
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable branch
         with:
           components: rustfmt, clippy
 
-      - uses: swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
           workspaces: './src-tauri -> target'
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: lts/*
           cache: npm
@@ -294,22 +296,22 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: owner/app-web
           path: app-web
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: owner/app-shell
           path: app-shell
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: lts/*
       - run: npm ci && npm run build
         working-directory: app-web
       - run: npm ci
         working-directory: app-shell
-      - uses: tauri-apps/tauri-action@2d793bf2c8c505b9b76211601b09aab48922225d # v1.0.0
+      - uses: tauri-apps/tauri-action@1deb371b0cd8bd54025b384f1cd735e725c4060f # v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -321,7 +323,7 @@ jobs:
 - `projectPath` is the directory containing `src-tauri`, not the repository root.
 - `frontendDist` in `app-shell/src-tauri/tauri.conf.json` must resolve to the built web assets, for example `../../app-web/dist` when both checkouts are siblings.
 - If the shell repo and frontend repo are private, `actions/checkout` needs a token with access to both (`token: ${{ secrets.CROSS_REPO_TOKEN }}`).
-- Pin the web repo checkout to a tag or SHA for reproducible releases; `ref:` defaults to the default branch.
+- Pin the web repo checkout to a full commit SHA for reproducible releases; `ref:` defaults to the default branch.
 - An alternative is to build the web app in one job, upload `dist/` as an artifact, and download it into the shell job. This avoids a cross-repo checkout at release time and keeps the frontend's own CI authoritative.
 
 Monorepo layout:
@@ -337,7 +339,7 @@ repo/
   working-directory: apps/web
 - run: npm ci
   working-directory: apps/desktop
-- uses: tauri-apps/tauri-action@<sha>
+- uses: tauri-apps/tauri-action@1deb371b0cd8bd54025b384f1cd735e725c4060f # v1.0.0
   with:
     projectPath: apps/desktop
 ```

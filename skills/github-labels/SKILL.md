@@ -83,10 +83,10 @@ jobs:
 ```
 
 - `actions/checkout` is required: the labeler reads the YAML file from the workspace.
-- The pinned refs are `actions/checkout@v7.0.1` and `crazy-max/ghaction-github-labeler@v6.0.0`, both Node 24 actions. Do not downgrade to majors that still declare `runs.using: node20`; Node 20 was removed from GitHub-hosted runners on 2026-09-23.
+- The pinned SHAs correspond to `actions/checkout` v7.0.1 and `crazy-max/ghaction-github-labeler` v6.0.0, both Node 24 actions. Do not downgrade to majors that still declare `runs.using: node20`; Node 20 was removed from GitHub-hosted runners on 2026-09-23.
 - `dry-run` on pull requests previews changes without applying them; a push to `main` applies them.
 - `skip-delete: true` keeps labels that are not in the manifest. Use it for the first rollout, then decide whether the manifest owns the full set.
-- Pin third-party actions to a commit SHA; the tags above are informational.
+- Pin third-party actions to a commit SHA; the version comments above are informational.
 
 ## Taxonomy
 

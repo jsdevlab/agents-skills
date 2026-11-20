@@ -50,11 +50,11 @@ make build
 Use the composite actions directly; they build the binary on the runner:
 
 ```yaml
-- uses: apache/skywalking-eyes/header@v0.9.0
-- uses: apache/skywalking-eyes/dependency@v0.9.0
+- uses: apache/skywalking-eyes/header@a196742f472feaffafea537ce5a2a4c3c53a8de4 # v0.9.0
+- uses: apache/skywalking-eyes/dependency@a196742f472feaffafea537ce5a2a4c3c53a8de4 # v0.9.0
 ```
 
-See `ci.md` for inputs, permissions, and complete workflows. Pin a tag or a commit SHA rather than `@main`.
+See `ci.md` for inputs, permissions, and complete workflows. Pin a full commit SHA rather than `@main` or a tag.
 
 ### Check the installed version
 

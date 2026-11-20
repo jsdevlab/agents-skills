@@ -5,7 +5,7 @@ SkyWalking Eyes publishes two composite actions in the same repository:
 - `apache/skywalking-eyes/header` — runs `license-eye header <mode>`.
 - `apache/skywalking-eyes/dependency` — runs `license-eye dependency <mode>`.
 
-Both actions build the `license-eye` binary from source on the runner using Go, then execute it. They are not precompiled JavaScript actions. Pin a release tag or a commit SHA; `@main` can change behavior without notice.
+Both actions build the `license-eye` binary from source on the runner using Go, then execute it. They are not precompiled JavaScript actions. Pin a full commit SHA; `@main` can change behavior without notice.
 
 Older workflows may use `apache/skywalking-eyes@<ref>` without a subpath. Since 0.4.0 that form is kept as an alias of `apache/skywalking-eyes/header@<ref>` for backward compatibility. New workflows should use `/header` or `/dependency` explicitly.
 
@@ -79,9 +79,9 @@ jobs:
   license-header:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Check license headers
-        uses: apache/skywalking-eyes/header@v0.9.0
+        uses: apache/skywalking-eyes/header@a196742f472feaffafea537ce5a2a4c3c53a8de4 # v0.9.0
         with:
           config: .licenserc.yaml
           mode: check
@@ -111,20 +111,20 @@ jobs:
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.head_ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Apply license headers
-        uses: apache/skywalking-eyes/header@v0.9.0
+        uses: apache/skywalking-eyes/header@a196742f472feaffafea537ce5a2a4c3c53a8de4 # v0.9.0
         with:
           config: .licenserc.yaml
           mode: fix
           token: ""
 
       - name: Commit fixes
-        uses: EndBug/add-and-commit@v11
+        uses: EndBug/add-and-commit@cc9c08ba6c8df3b93a8f2db63e89b98368ae2ae8 # v11.1.1
         with:
           author_name: License Bot
           author_email: license-bot@users.noreply.github.com
@@ -165,37 +165,37 @@ jobs:
   dependency-license:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Pick the setup steps for the manifests in .licenserc.yaml.
-      - uses: actions/setup-go@v7
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
         if: hashFiles('go.mod') != ''
         with:
           go-version-file: go.mod
 
-      - uses: actions/setup-java@v6
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         if: hashFiles('pom.xml') != ''
         with:
           distribution: temurin
           java-version: '21'
           cache: maven
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         if: hashFiles('package.json') != ''
         with:
           node-version: '24'
           cache: npm   # or pnpm / yarn
 
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable branch
         if: hashFiles('Cargo.toml') != ''
 
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@be3c7df29b3349ec6bcfc6b4792f1cf9f5237d18 # v1.343.0
         if: hashFiles('Gemfile.lock') != ''
         with:
           bundler-cache: true
 
       - name: Check dependency licenses
-        uses: apache/skywalking-eyes/dependency@v0.9.0
+        uses: apache/skywalking-eyes/dependency@a196742f472feaffafea537ce5a2a4c3c53a8de4 # v0.9.0
         with:
           config: .licenserc.yaml
           mode: check
@@ -227,15 +227,15 @@ jobs:
   license-drift:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Set up the ecosystem(s) used by dependency.files here.
-      - uses: actions/setup-go@v7
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
         with:
           go-version-file: go.mod
 
       - name: Regenerate LICENSE
-        uses: apache/skywalking-eyes/dependency@v0.9.0
+        uses: apache/skywalking-eyes/dependency@a196742f472feaffafea537ce5a2a4c3c53a8de4 # v0.9.0
         with:
           config: .licenserc.yaml
           mode: resolve
@@ -313,13 +313,13 @@ Run one job per config, or one step per module:
 
 ```yaml
       - name: Check module A
-        uses: apache/skywalking-eyes/header@v0.9.0
+        uses: apache/skywalking-eyes/header@a196742f472feaffafea537ce5a2a4c3c53a8de4 # v0.9.0
         with:
           config: modules/a/.licenserc.yaml
           mode: check
 
       - name: Check module B
-        uses: apache/skywalking-eyes/header@v0.9.0
+        uses: apache/skywalking-eyes/header@a196742f472feaffafea537ce5a2a4c3c53a8de4 # v0.9.0
         with:
           config: modules/b/.licenserc.yaml
           mode: check

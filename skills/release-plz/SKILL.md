@@ -145,13 +145,13 @@ jobs:
       contents: write
       pull-requests: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable branch
       - name: Run release-plz
-        uses: release-plz/action@1fb72a9583c3601c197b3bd6fc6ce50d58e28ef3 # v0.5.148
+        uses: release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b # v0.5.148
         with:
           command: release
         env:
@@ -169,13 +169,13 @@ jobs:
       group: release-plz-${{ github.ref }}
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@39008827e6b4319a349e9a42dfc90579dd25f1ca # stable branch
       - name: Run release-plz
-        uses: release-plz/action@1fb72a9583c3601c197b3bd6fc6ce50d58e28ef3 # v0.5.148
+        uses: release-plz/action@66b324fd6c72d05d2a08568492ecdd62bfb8a62b # v0.5.148
         with:
           command: release-pr
         env:
@@ -190,7 +190,7 @@ Key points:
 - **Do not add a canceling concurrency group to the release job.** A canceled release can be skipped. Put concurrency only on the PR job with `cancel-in-progress: false`.
 - **The default `GITHUB_TOKEN` cannot trigger further workflows.** PR checks and `release`/`tag` workflows will not run. Use a PAT or a GitHub App token if you need them.
 - **Trusted publishing:** omit `CARGO_REGISTRY_TOKEN`, add `id-token: write` to the release job, and configure crates.io trusted publishing. New crates still need a manual first publish.
-- **Pin the action.** Use a release tag or a commit SHA; the docs' `@v0.5` moves with every release. v0.5.148 pins commit `1fb72a9583c3601c197b3bd6fc6ce50d58e28ef3` and defaults to release-plz 0.4.3; override with the `version` input if needed.
+- **Pin the action to a full commit SHA.** The docs' `@v0.5` moves with every release. v0.5.148 pins commit `66b324fd6c72d05d2a08568492ecdd62bfb8a62b` and defaults to release-plz 0.4.3; override with the `version` input if needed.
 - **Outputs:** `prs`, `pr`, `releases`, `prs_created`, `releases_created`. Use `pr` / `releases` for labels, comments, or follow-up jobs.
 
 Full workflows, PAT/App setup, trusted publishing, labels, auto-merge, scheduled runs, and outputs: `references/github-actions.md`.

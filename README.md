@@ -61,15 +61,18 @@ Copy a skill directory into one of:
 
 ## CI version policy
 
-CI examples in these skills use current action majors and a supported Node LTS.
-GitHub-hosted runners removed Node 20 on 2026-09-23; do not use Node 20 or
-action majors that still declare `runs.using: node20`. JavaScript actions must
-run on Node 24 or newer.
+CI examples pin every action to a full 40-character commit SHA with a
+`# vX.Y.Z` comment, and use a supported Node LTS. GitHub-hosted runners removed
+Node 20 on 2026-09-23; do not use Node 20 or action majors that still declare
+`runs.using: node20`. JavaScript actions must run on Node 24 or newer.
 
-Current majors used in the examples include `actions/checkout@v7`,
-`actions/setup-node@v7`, `actions/setup-go@v7`, `actions/setup-python@v7`,
-`actions/setup-java@v6`, `pnpm/setup@v3` (pnpm 11+),
-`actions/create-github-app-token@v3`, and `EndBug/add-and-commit@v11`.
+The pins correspond to current releases, including `actions/checkout` v7.0.1,
+`actions/setup-node` v7.1.0, `actions/setup-go` v7.1.0,
+`actions/setup-python` v7.1.0, `actions/setup-java` v6.3.0,
+`pnpm/setup` v3.2.0 (pnpm 11+), `actions/create-github-app-token` v3.4.0, and
+`EndBug/add-and-commit` v11.1.1. `dtolnay/rust-toolchain` is pinned to the
+`stable` branch commit; its default `toolchain` input remains `stable`, so it
+still installs the latest stable Rust.
 
 ## Skills
 

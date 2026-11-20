@@ -181,7 +181,7 @@ Full per-ecosystem notes, summary template variables, and compatibility flags: `
 
 ## GitHub Actions
 
-Pin the action; do not use `@main`. The actions are composite and build the Go binary on each run, so a release tag or commit SHA keeps behavior stable.
+Pin the action to a full commit SHA; do not use `@main`. The actions are composite and build the Go binary on each run, so a commit SHA keeps behavior stable.
 
 ```yaml
 permissions:
@@ -191,8 +191,8 @@ jobs:
   license-header:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: apache/skywalking-eyes/header@v0.9.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: apache/skywalking-eyes/header@a196742f472feaffafea537ce5a2a4c3c53a8de4 # v0.9.0
         with:
           config: .licenserc.yaml
           mode: check
@@ -204,8 +204,8 @@ For dependency compatibility:
   dependency-license:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: apache/skywalking-eyes/dependency@v0.9.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: apache/skywalking-eyes/dependency@a196742f472feaffafea537ce5a2a4c3c53a8de4 # v0.9.0
         with:
           config: .licenserc.yaml
           mode: check

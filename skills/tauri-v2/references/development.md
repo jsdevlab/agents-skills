@@ -133,11 +133,11 @@ Options for getting the frontend into the shell build:
 For CI, check out both repositories and use `tauri-action`'s `projectPath`:
 
 ```yaml
-- uses: actions/checkout@v7
+- uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
   with:
     repository: owner/app-web
     path: app-web
-- uses: actions/checkout@v7
+- uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
   with:
     repository: owner/app-shell
     path: app-shell
@@ -145,7 +145,7 @@ For CI, check out both repositories and use `tauri-action`'s `projectPath`:
   working-directory: app-web
 - run: npm ci
   working-directory: app-shell
-- uses: tauri-apps/tauri-action@<sha> # v1.0.0
+- uses: tauri-apps/tauri-action@1deb371b0cd8bd54025b384f1cd735e725c4060f # v1.0.0
   with:
     projectPath: app-shell
 ```

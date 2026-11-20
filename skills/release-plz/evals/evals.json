@@ -9,7 +9,7 @@
       "expectations": [
         "A GitHub Actions workflow runs both release-pr and release in separate jobs",
         "The checkout step uses fetch-depth: 0",
-        "The release-plz action is pinned to a release tag or commit SHA, not @main",
+        "The release-plz action is pinned to a full 40-character commit SHA, not @main or a floating tag",
         "The release-pr job has contents: write and pull-requests: write",
         "The release job has contents: write and passes GITHUB_TOKEN and CARGO_REGISTRY_TOKEN",
         "Concurrency is used on the release-pr job and does not cancel the release job",

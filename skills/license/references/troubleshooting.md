@@ -281,7 +281,7 @@ Platform-specific dependency variants differ between Linux, macOS, and Windows. 
 
 ### The action cannot be found or fails to build
 
-- Pin an existing tag or commit: `apache/skywalking-eyes/header@v0.9.0`. Do not use a branch that may not contain the action at the expected path.
+- Pin a full commit SHA; the examples use the v0.9.0 commit `a196742f472feaffafea537ce5a2a4c3c53a8de4`. Do not use a branch that may not contain the action at the expected path.
 - The action builds with Go; a runner without network access cannot download modules.
 - On self-hosted runners, `make install` copies to `/usr/local/bin`; ensure the runner user can write there.
 
